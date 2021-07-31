@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Electric Consumption calculator</title>
+	<link rel="stylesheet" type="text/css" href="bootstrap-4.3.1/css/bootstrap.min.css">
+</head>
+<body class="badge-secondary">
+<h1><center>Calculate Consumptions </center></h1>
+<hr>
+<div class="container">
+	<div class="row">
+		<div class="col">
+			<div class="card ">
+				<div class="card-header bg-success text-light ">Result </div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-4">
+							<label class="text-dark">Price / Unit</label>
+							<input type="number" id="unit_price" placeholder="Unit price" class="form-control" value="7" >
+						</div>
+						<div class="col-md-2">
+							<label>&nbsp;</label><br>
+							<input type="button" Value="Add" class="btn btn-success " onclick="addApplience()" >
+						</div>
+						<div class="col-md-2">
+							<label>&nbsp;</label><br>
+						<input type="button" Value="Calculate" class="btn btn-info" onclick="calculateConsumption()" >
+						</div>
+					</div>
+
+				<div class="row">
+					<div class="col-8">
+						<hr>
+						<table class="table table-bordered">
+							<tr>
+								<th>Time</th>
+								<th>Load</th>
+								<th>Units</th>
+								<th>Cost</th>
+							</tr>
+							<tr>
+								<th>Per Day</th>
+								<td><span id="totalPower-perDay"></span></td>
+								<td><span id="totalUnits-perDay"></span></td>
+								<td><span id="totalCost-perDay"></span></td>
+							</tr>
+							<tr>
+								<th>Per Month</th>
+								<td><span id="totalPower-perMonth"></span></td>
+								<td><span id="totalUnits-perMonth"></span></td>
+								<td><span id="totalCost-perMonth"></span></td>
+							</tr>
+							<tr>
+								<th>Per Year</th>
+								<td><span id="totalPower-perYear"></span></td>
+								<td><span id="totalUnits-perYear"></span></td>
+								<td><span id="totalCost-perYear"></span></td>
+							</tr>
+						</table>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-md">
+			<table class="table">
+				<thead>
+
+				<tr>
+					<th>Name</th>
+					<th>Quantity</th>
+					<th>Power (Watt)</th>
+					<th>Uses (Hours)</th>
+					<th>Units</th>
+					<th>CP/Day</th>
+					<th>CP/Month</th>
+					<th>CP/Year</th>
+				</tr>
+				</thead>
+				<tbody id="items">
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+
+<input type="hidden" id="item-index" value="1">
+<script type="text/javascript" src="jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="bootstrap-4.3.1/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+
+function summerApplience() {
+	let app =
+	[
+		{'name' : 'Ciling Fan' , 'quantity': 2, 'watts': 35, 'uses': 1 },
+		{'name' : 'refrigrator' , 'quantity': 1, 'watts': 80, 'uses': 20 },
+		{'name' : 'Small Led Bulb' , 'quantity': 5, 'watts': 5, 'uses': 2 },
+		{'name' : 'Led Tube 22W' , 'quantity': 2, 'watts': 22, 'uses': 5 },
+		{'name' : 'Led Tube 18W' , 'quantity': 2, 'watts': 18, 'uses': 1 },
+		{'name' : 'Water Pump' , 'quantity': 1, 'watts': 700, 'uses': 1 },
+		{'name' : 'RO' , 'quantity': 1, 'watts': 100, 'uses': 1 },
+		{'name' : 'Air Cooler' , 'quantity': 2, 'watts': 190, 'uses': 10 },
+
+	] ;
+
+	return app;
+}
+console.log(summerApplience()[0]);
+function wintterApplience() {
+	let app =
+	[
+		{'name' : 'refrigrator' , 'quantity': 1, 'watts': 80, 'uses': 6 },
+		{'name' : 'Small Led Bulb' , 'quantity': 5, 'watts': 5, 'uses': 2 },
+		{'name' : 'Led Tube 22W' , 'quantity': 2, 'watts': 22, 'uses': 5 },
+		{'name' : 'Led Tube 18W' , 'quantity': 2, 'watts': 18, 'uses': 1 },
+		{'name' : 'Water Pump' , 'quantity': 1, 'watts': 700, 'uses': 1 },
+		{'name' : 'RO' , 'quantity': 1, 'watts': 100, 'uses': 1 },
+		{'name' : 'Water Heater' , 'quantity': 1, 'watts': 1500, 'uses': 1 },
+
+	] ;
+
+	return app;
+}
+function addApplience() {
+	var index = document.getElementById("item-index").value;
+	var tableRow = '<tr id="item-'+index+ '"  class="item" index="'+index+'" >';
+	tableRow += addName(index);
+	tableRow += qut(index);
+	tableRow += power(index);
+	tableRow += uses(index);
+	tableRow += unitPerHr(index);
+	tableRow += cpPerDay(index);
+	tableRow += cpPerMonth(index);
+	tableRow += cpPerYear(index);
+	tableRow += '</tr>';
+	$('#items').append(tableRow);
+	document.getElementById("item-index").value = ++index;
+	// body...
+}
+
+function addName(index) {
+	var html = '';
+	html += '<td>';
+	html += '<input type="text" id="name-'+index+'" class="form-control" placeholder="Applience Name"  >';
+	html += '</td>';
+	return html;
+}
+function qut(index) {
+	var html = '';
+	html += '<td>';
+	html += '<input type="text" id="quantity-'+index+'" class="form-control" value="0"  >';
+	html += '</td>';
+	return html;
+}
+
+function power(index) {
+	var html = '';
+	html += '<td>';
+	html += '<input type="text" id="watts-'+index+'" class="form-control" value="0" >';
+	html += '</td>';
+	return html;
+}
+
+function uses(index) {
+	var html = '';
+	html += '<td>';
+	html += '<input type="text" id="uses-'+index+'" class="form-control" value="0" >';
+	html += '</td>';
+	return html;
+}
+
+function unitPerHr(index) {
+	var html = '';
+	html += '<td>';
+	html += '<input type="text" disabled id="units-'+index+'" class="form-control" value="0" >';
+	html += '</td>';
+	return html;
+}
+
+function cpPerDay(index) {
+	var html = '';
+	html += '<td>';
+	html += '<input type="text" disabled id="cpPerDay-'+index+'" class="form-control" value="0" >';
+	html += '</td>';
+	return html;
+}
+
+function cpPerMonth(index) {
+	var html = '';
+	html += '<td>';
+	html += '<input type="text" disabled id="cpPerMonth-'+index+'" class="form-control" value="0" >';
+	html += '</td>';
+	return html;
+}
+
+function cpPerYear(index) {
+	var html = '';
+	html += '<td>';
+	html += '<input type="text" disabled id="cpPerYear-'+index+'" class="form-control" value="0" >';
+	html += '</td>';
+	return html;
+}
+
+function calculateConsumption() {
+
+    let daliyUnits =  monthlyUnits = yearlyUnits = 0;
+    let daliyCP = monthlyCP = yearlyCP = 0;
+
+    let price = $('#unit_price').val();
+    $('#items .item').each(function(){
+		var index = $(this).attr('index');
+		let qty = $('#quantity-'+ index).val();
+		let power = $('#watts-'+ index).val();
+		let uses = $('#uses-'+ index).val();
+
+		watt = (power * uses );
+		units = ( watt / 1000 ) * qty ;
+
+		$('#units-'+ index).val(units.toFixed(2));
+		costPrice = units * price;
+		daliyCP += costPrice;
+		daliyUnits += units ;
+		temp = units;
+		$('#cpPerDay-'+ index).val(temp.toFixed(2) + ' | ' + costPrice.toFixed(2));
+
+		costPrice = units * price * 30;
+		monthlyCP += costPrice;
+		monthlyUnits += units * 30;
+		temp = units * 30 ;
+		$('#cpPerMonth-'+ index).val(temp.toFixed(2) + ' | ' + costPrice.toFixed(2));
+
+		costPrice = units * price * 365;
+		yearlyCP += costPrice;
+		yearlyUnits += units * 365 ;
+		temp = units * 365 ;
+		$('#cpPerYear-'+ index).val(temp.toFixed(2) + ' | ' + costPrice.toFixed(2));
+
+    });
+		$('#totalCost-perDay').text(daliyCP.toFixed(2));
+		$('#totalCost-perMonth').text(monthlyCP.toFixed(2));
+		$('#totalCost-perYear').text(yearlyCP.toFixed(2));
+
+		$('#totalUnits-perDay').text(daliyUnits.toFixed(2));
+		$('#totalUnits-perMonth').text(monthlyUnits.toFixed(2));
+		$('#totalUnits-perYear').text(yearlyUnits.toFixed(2));
+
+
+}
+</script>
+</body>
+</html>
